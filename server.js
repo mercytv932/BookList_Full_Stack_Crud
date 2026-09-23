@@ -45,7 +45,11 @@ app.use(express.urlencoded({ extended: true }));
 app.get("/books/", (req, res) => {
   res.send();
 });
-//N
+
+//New - Generate a form for the creation of a new book
+app.get("/books/new", (req, res) => {
+  res.render("new.js");
+});
 //D
 //U
 //Create - Make a book!
