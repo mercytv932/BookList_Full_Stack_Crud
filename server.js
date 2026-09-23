@@ -48,7 +48,7 @@ app.get("/books/", (req, res) => {
 
 //New - Generate a form for the creation of a new book
 app.get("/books/new", (req, res) => {
-  res.render("new.js");
+  res.render("new.ejs");
 });
 //D
 //U
