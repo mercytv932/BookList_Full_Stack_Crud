@@ -5,9 +5,8 @@ require("dotenv").config();
 const PORT = process.env.PORT;
 const uri = process.env.MONGO_URI;
 const mongoose = require("mongoose");
-const { MongoClient } = require("mongodb");
-//MiddleWare
-const client = new MongoClient(uri);
+const Book = require("./models/Book.js");
+
 //DataBase
 //MongoDb connection
 mongoose.connect(process.env.MONGO_URI);
@@ -36,17 +35,41 @@ const books = [
   },
 ];
 
+//MiddleWare
+app.use(express.urlencoded({ extended: true }));
+
 //Routes
 //I.N.D.U.C.E.S
 
 //Index - List
 app.get("/books/", (req, res) => {
-  res.send(books);
+  res.send();
 });
 //N
 //D
 //U
-//C
+//Create - Make a book!
+
+app.post("/books", (req, res) => {
+  //Checking if the book's completed
+  if (req.body.completed === "on") {
+    req.body.completed === true;
+  } else {
+    req.body.completed = false;
+  }
+
+  Book.create(req.body)
+    .then((createdBook) => {
+      console.log("Book has been successfuly created");
+      console.log(req.body);
+      res.redirect("/books");
+    })
+    .catch((error) => {
+      console.log("Error Creatiing The Book...", error);
+      res.status(500).send("SORRY ISSUE CREATING BOOK!");
+    });
+});
+
 //E
 //Show - one
 app.get("/books/:indexOfBooksArray", (req, res) => {
