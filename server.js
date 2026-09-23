@@ -37,13 +37,23 @@ const books = [
 
 //MiddleWare
 app.use(express.urlencoded({ extended: true }));
+app.set("view engine", "ejs");
 
 //Routes
 //I.N.D.U.C.E.S
 
 //Index - List
-app.get("/books/", (req, res) => {
-  res.send();
+app.get("/books/", async (req, res) => {
+  // res.render("index.ejs");
+  try {
+    const allBooks = await Book.find({});
+    res.render("index.ejs", {
+      books: allBooks,
+    });
+  } catch (error) {
+    console.error("There was an issue rendering all books", error);
+    res.status(500).send(error);
+  }
 });
 
 //New - Generate a form for the creation of a new book
