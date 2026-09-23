@@ -9,8 +9,12 @@ const { MongoClient } = require("mongodb");
 //MiddleWare
 const client = new MongoClient(uri);
 //DataBase
-//MongoDb 
-mongoose.connect(process.env.MONGO_URI)
+//MongoDb connection
+mongoose.connect(process.env.MONGO_URI);
+const db = mongoose.connection;
+db.on("error", (error) => console.log(error.message + "mongo us not running"));
+db.on("connected", () => console.log("mongo is conncted"));
+db.on("disconnected", () => console.log("mongo has been disconnected"));
 
 const books = [
   {
