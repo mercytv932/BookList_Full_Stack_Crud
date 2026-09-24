@@ -43,9 +43,31 @@ app.get("/books/new", (req, res) => {
   res.render("new.ejs");
 });
 //D
-//Update - Perform teh action
-//Create - Make a book!
 
+app.delete("/books/:id", async(req, res)=>{
+  
+})
+
+//Update - Perform the action of changing the content
+app.put("/books/:id", async (req, res) => {
+  if (req.body.completed === "on") {
+    req.body.completed = true;
+  } else {
+    req.body.completed = false;
+  }
+
+  try {
+    const updatedBook = await Book.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+    }).exec();
+    res.redirect(`/books${req.params.id}`);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("There seems to be an issues with the update...");
+  }
+});
+
+//Create - Make a book!
 app.post("/books", (req, res) => {
   //Checking if the book's completed
   if (req.body.completed === "on") {
