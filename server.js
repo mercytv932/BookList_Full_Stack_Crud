@@ -43,8 +43,8 @@ app.get("/books/", async (req, res) => {
 app.get("/books/new", (req, res) => {
   res.render("new.ejs");
 });
-//D
 
+//Delte - perform the action of deleteing a book
 app.delete("/books/:id", async (req, res) => {
   try {
     await Book.findByIdAndDelete(req.params.id);
@@ -115,9 +115,16 @@ app.get("/books/:id/edit", async (req, res) => {
 });
 
 //Show - one
+app.get("/books:id", async (req, res) => {
+  try {
+    const foundBook = Book.findById(req.params.id);
+    res.render("show.ejs", { book: foundBook });
+  } catch (error) {
+    res.status(500).send("Issue finding individual book!");
+  }
+});
 
 //Port
-
 app.listen(PORT, () => {
   console.log(`Server is running on port: http://localhost:${PORT}`);
 });
