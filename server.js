@@ -4,6 +4,7 @@ const app = express();
 require("dotenv").config();
 const PORT = process.env.PORT;
 const uri = process.env.MONGO_URI;
+const methodOverride = require("method-override");
 const mongoose = require("mongoose");
 const Book = require("./models/Book.js");
 
@@ -15,29 +16,10 @@ db.on("error", (error) => console.log(error.message + "mongo us not running"));
 db.on("connected", () => console.log("mongo is conncted"));
 db.on("disconnected", () => console.log("mongo has been disconnected"));
 
-const books = [
-  {
-    title: "Ultimate Star Wras Guide",
-    author: "George lucas",
-    completed: true,
-  },
-
-  { title: "The Alchemist", author: "Paulo Coelho", completed: false },
-
-  { title: "Open Water", author: "Caleb Azumah Nelson", completed: true },
-
-  { title: "The Art of War", author: "Sun Tzu", completed: false },
-
-  {
-    title: "The Circle of Fire",
-    author: "Don Miguel Ruiz & Janet Mills",
-    completed: true,
-  },
-];
-
 //MiddleWare
 app.use(express.urlencoded({ extended: true }));
 app.set("view engine", "ejs");
+app.use(methodOverride("_method"));
 
 //Routes
 //I.N.D.U.C.E.S
@@ -61,7 +43,7 @@ app.get("/books/new", (req, res) => {
   res.render("new.ejs");
 });
 //D
-//U
+//Update - Perform teh action
 //Create - Make a book!
 
 app.post("/books", (req, res) => {
@@ -84,7 +66,25 @@ app.post("/books", (req, res) => {
     });
 });
 
-//E
+//E - give us a form to edit content
+app.get("/books/:id/edit", async (req, res) => {
+  // res.render("edit.ejs") <- fine for rendering a page/test
+  try {
+    // grab my "found book"
+    const foundBook = await Book.findById(req.params.id);
+
+    // if the book's not found..
+    if (!foundBook) {
+      return res.status(404).send("Book Not Found");
+    }
+
+    res.render("edit.ejs", { book: foundBook });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("SERVER ISSUE!");
+  }
+});
+
 //Show - one
 app.get("/books/:indexOfBooksArray", (req, res) => {
   res.send(books[req.params.indexOfBooksArray]);
@@ -95,3 +95,23 @@ app.get("/books/:indexOfBooksArray", (req, res) => {
 app.listen(PORT, () => {
   console.log(`Server is running on port: http://localhost:${PORT}`);
 });
+
+// const books = [
+//   {
+//     title: "Ultimate Star Wras Guide",
+//     author: "George lucas",
+//     completed: true,
+//   },
+
+//   { title: "The Alchemist", author: "Paulo Coelho", completed: false },
+
+//   { title: "Open Water", author: "Caleb Azumah Nelson", completed: true },
+
+//   { title: "The Art of War", author: "Sun Tzu", completed: false },
+
+//   {
+//     title: "The Circle of Fire",
+//     author: "Don Miguel Ruiz & Janet Mills",
+//     completed: true,
+//   },
+// ];
