@@ -20,6 +20,7 @@ db.on("disconnected", () => console.log("mongo has been disconnected"));
 app.use(express.urlencoded({ extended: true }));
 app.set("view engine", "ejs");
 app.use(methodOverride("_method"));
+app.use(express.static("public"));
 
 //Routes
 //I.N.D.U.C.E.S
@@ -44,9 +45,15 @@ app.get("/books/new", (req, res) => {
 });
 //D
 
-app.delete("/books/:id", async(req, res)=>{
-  
-})
+app.delete("/books/:id", async (req, res) => {
+  try {
+    await Book.findByIdAndDelete(req.params.id);
+    res.redirect("/books");
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("There was an issues deleting the book...");
+  }
+});
 
 //Update - Perform the action of changing the content
 app.put("/books/:id", async (req, res) => {
@@ -108,9 +115,6 @@ app.get("/books/:id/edit", async (req, res) => {
 });
 
 //Show - one
-app.get("/books/:indexOfBooksArray", (req, res) => {
-  res.send(books[req.params.indexOfBooksArray]);
-});
 
 //Port
 
