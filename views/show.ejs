@@ -1,18 +1,65 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Library App</title>
-  </head>
-  <body>
-    <nav>
-      <a href="/books">Back to Books Index</a>
-    </nav>
-    <h1><%=book.title %></h1>
-    Author: <%= book.author%>
-    <br />
-    Completed: <%= book.completed %>
-  </body>
+
+<head>
+    <link rel="stylesheet" href="/style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= book.title %> | Bookshelf</title>
+</head>
+
+<body>
+
+    <header class="navbar">
+        <div class="logo">📚 Bookshelf</div>
+
+        <a class="back-btn" href="/books">
+            ← Back to Books
+        </a>
+    </header>
+
+    <main class="book-details">
+
+        <div class="book-cover">
+            📖
+        </div>
+
+        <div class="book-info">
+
+            <p class="eyebrow">BOOK DETAILS</p>
+
+            <h1><%= book.title %></h1>
+
+            <p class="author">
+                by <%= book.author %>
+            </p>
+
+            <% if (book.completed) { %>
+                <span class="status completed">
+                    ✓ Completed
+                </span>
+            <% } else { %>
+                <span class="status reading">
+                    ● Currently Reading
+                </span>
+            <% } %>
+
+            <div class="detail-actions">
+                <a class="edit-btn" href="/books/<%= book._id %>/edit">
+                    Edit Book
+                </a>
+
+                <form action="/books/<%= book._id %>?_method=DELETE" method="POST">
+                    <button class="delete-btn" type="submit">
+                        Delete Book
+                    </button>
+                </form>
+            </div>
+
+        </div>
+
+    </main>
+
+</body>
+
 </html>

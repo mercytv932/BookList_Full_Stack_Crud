@@ -2,33 +2,42 @@
 <html lang="en">
 
 <head>
+    <link rel="stylesheet" href="/style.css">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Book List</title>
 </head>
-
 <body>
-    <h1>Reading List</h1>
 
-    <ul>
-        <% books.forEach(book=> { %>
-            <li>
-                <a href="/books/<%=book._id; %>">
-                    <%=book.title; %>
-                </a>
-                <form action="/books/<%=book.id %>?_method=DELETE" method="POST">
-                    <input type="submit" value="DELETE">
-                </form>
-                <a href="/books/<%=book._id %>/edit">Edit</a>
+    <header class="navbar">
+        <div class="logo">📚 Bookshelf</div>
 
-                <BR></BR>
-            </li>
+        <a class="add-book-btn" href="/books/new">
+            + Add Book
+        </a>
+    </header>
+
+    <main class="container">
+
+        <h1>Reading List</h1>
+
+        <ul>
+            <% books.forEach(book=> { %>
+                <li>
+                    <a href="/books/<%=book._id; %>">
+                        <%=book.title; %>
+                    </a>
+
+                    <form action="/books/<%=book.id %>?_method=DELETE" method="POST">
+                        <input type="submit" value="DELETE">
+                    </form>
+
+                    <a href="/books/<%=book._id %>/edit">Edit</a>
+                </li>
             <% }) %>
-    </ul>
+        </ul>
 
-    <nav>
-        <a href="/books/new">Add a New Book</a>
-    </nav>
+    </main>
 
 </body>
 
